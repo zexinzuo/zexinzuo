@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	
+<mapper namespace="com.bw.dao.ToDao">
+	<resultMap type="com.bw.entity.Torder" id="order">
+		<id property="oid" column="OID"/>
+		<result property="oname" column="ONAME"/>
+		<result property="tel" column="TEL"/>
+		<result property="tid" column="TID"/>
+		<result property="aid" column="AID"/>
+		<result property="fid" column="FID"/>
+		<association property="time" javaType="com.bw.entity.Time">
+			<result property="tid" column="TID"/>
+			<result property="tname" column="TNAME"/>
+		</association>
+		<association property="ad" javaType="com.bw.entity.Address">
+			<result property="aid" column="AID"/>
+			<result property="aname" column="ANAME"/>
+		</association>
+		<association property="food" javaType="com.bw.entity.Food">
+			<result property="fid" column="FID"/>
+			<result property="fname" column="FNAME"/>
+		</association>
+	</resultMap>
+
+	<select id="list" resultMap="order">
+		select * from torder o left join address a on a.aid=o.aid left join time t on t.tid=o.tid left join food f on f.fid=o.fid limit #{page.startIndex},#{page.pageSize}
+	</select>
+	<insert id="add">
+		insert into torder(oid,oname,tel,tid,aid,fid)values(null,#{oname},#{tel},#{tid},#{aid},#{fid})
+	</insert>
+	<select id="count" resultType="int">
+		select count(*) from torder
+	</select>
+	<delete id="del">
+		delete from torder where oid=#{oid}
+	</delete>
+</mapper>
